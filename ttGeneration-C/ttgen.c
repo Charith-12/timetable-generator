@@ -183,10 +183,10 @@ int main(){
 }
   // ---------------------------------------------------------------------------------------------------------------------------------------------------
   
-  struct batch batchOne = loadBatch("modules.txt");
+  struct batch batchOne = loadBatch("modules.txt"); // TODO: Handling multiple batches
   
   //displaying the modules linked list
-  printf("\modules.txt data loaded to a linked list.\n Modules linked list for the batch as follows,\n\n");
+  printf("modules.txt data loaded to a linked list.\n Modules linked list for the batch as follows,\n\n");
 	displayModulesLL(batchOne.modules);
 	
   // Calculating the total slot requirement for all added batches.
