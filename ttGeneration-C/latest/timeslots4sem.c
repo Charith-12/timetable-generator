@@ -667,9 +667,11 @@ int addHolidays(char fileName[], struct time_slot* timeslotsArray[sem_total_week
        	   
        	if(valid_date(dd, mm, yyyy)){
        		// get the day diff. from semester starting day
+       		//printf("\n YES A VALID DATE!\n");
        		int day_diff = getDayDiff(sd,sm,sy,dd,mm,yyyy);
-       		if(0 <= day_diff <= sem_total_days){   // if diff (-) ignore, if (+), diff<sem_total_days (with in the semster's time period.)
+       		if( (0 <= day_diff) && ( day_diff <= sem_total_days) ){   // if diff (-) ignore, if (+), diff<sem_total_days (with in the semster's time period.)
        			
+       			//printf("\n YES, THE HOLIDAY IS WITHIN THE SEMESTER\n");
        			// calculating the week no. from days.
        			int weekno = (day_diff+(sem_total_days_req-sem_total_days))/7;  // add dummy days to the day diff
        			// getting the day of the week from the remainder.
@@ -683,8 +685,10 @@ int addHolidays(char fileName[], struct time_slot* timeslotsArray[sem_total_week
 			   }
 		}
  	}
+ 	printf("\n Holidays added!\n");
     	
  	fclose(fp2);
+ 	printf("\n file closed\n");
  	 
  	return 0;
 }
