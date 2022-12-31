@@ -1,0 +1,7 @@
+USE THESE COMMANDS:
+
+1. TO COMPILE-
+gcc -o mysqlc $(mysql_config --cflags) $(mysql_config --libs) Untitled1LinVM.c -lm -lmysqlclient
+
+2. TO RUN-
+./mysqlc
