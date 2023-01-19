@@ -1,0 +1,45 @@
+//  import { combineReducers } from 'redux';
+//  import { createStore } from 'redux'
+
+
+//  const initialState = {
+//     showNext: 0
+//   }
+
+//   function rootReducer(state = initialState, action) {
+//     switch (action.type) {
+//       case 'SHOW':
+//         return {
+//          showNext : 1 
+//         };
+//       default:
+//         return state;
+//     }
+//   }
+  
+// //   const store = configureStore(rootReducer);
+// const store = createStore(reducer);
+import { legacy_createStore as createStore} from 'redux'
+import { createStore } from 'redux';
+
+const initialState = {
+  count: 0
+};
+
+function reducer(state = initialState, action) {
+  switch (action.type) {
+    case 'INCREMENT':
+      return {
+        count: state.count + 1
+      };
+    case 'DECREMENT':
+      return {
+        count: state.count - 1
+      };
+    default:
+      return state;
+  }
+}
+
+const store = createStore(reducer);
+

@@ -1,0 +1,68 @@
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}
+
+.header{
+  text-align: center;
+  background-color: gray;
+  padding: 0.25%;
+}
+
+.header h1{
+  margin-top: 0;
+}
+
+.dates{
+  
+  justify-content: center;
+  display: flex;
+  padding: 5%;
+  background-color: aqua;
+}
+
+.dates > * {
+  margin: 2%;
+  padding: 2%;
+  border: 1px solid green;
+}
+
+.button{
+  display: inline;
+ margin-left:10%;
+ margin-top: 5%;
+padding: 2em;
+padding-inline: 4em;
+}
+
+.holidays{
+  margin-top: 1%;
+}
+
+.NavButton{
+  display: flex;
+}
+
+.BatchForm{
+  margin-top: 5%;
+}
+
+.FormButtons{
+  display: flex;
+  margin-top: 1%;
+}
+
+.FormButtons button{
+  margin-inline: 1%;
+
+}
+
