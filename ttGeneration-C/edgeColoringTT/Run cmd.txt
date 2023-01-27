@@ -1,0 +1,6 @@
+gcc -o mysqlc $(mysql_config --cflags) $(mysql_config --libs) setEdgeCols.c -lmysqlclient
+
+
+only grop by mysql error fix
+
+SET GLOBAL sql_mode=(SELECT REPLACE(@@sql_mode,'ONLY_FULL_GROUP_BY',''));
