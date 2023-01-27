@@ -1,6 +1,11 @@
 gcc -o mysqlc $(mysql_config --cflags) $(mysql_config --libs) setEdgeCols.c -lmysqlclient
 
+IMPORTANT 
+change the connectDB() method with the your server and user login details. oherwise won't connect to the DB.
 
-only grop by mysql error fix
+
+/* only if happens
+only group by mysql error fix:
 
 SET GLOBAL sql_mode=(SELECT REPLACE(@@sql_mode,'ONLY_FULL_GROUP_BY',''));
+*/
