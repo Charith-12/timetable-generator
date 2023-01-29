@@ -56,6 +56,8 @@ struct classroom* copyLL(struct classroom* head); // function prototype for dupl
 int getNoStudents(int batch); // function prototype for getting the no. of students of a batch.
 struct classroom* chooseClassroom(int student_count, struct classroom* classroomListCopy_head); // function prototype for choosing the best classromm based on capacity.
 struct classroom* removeClassroomNode(struct classroom* copyOfclassroomsLL_head, int roomno); // for romoving a node from a classrooms LL.
+void deleteLL(struct classroom** head_ref); // prototype for deleting classrooms LL copy
+//int assignClassroomsRec(struct edge* sortedEdgesLL_head, struct edge* dupli_edgesLL_head, struct classroom* classroomsLL_head, int ts_count, int firstcall);
 
 
 int main(void) {
@@ -152,6 +154,15 @@ int main(void) {
   displaySortedEdgesLL(sortedEdgesLL_head);
   
   if (putEdgesLL(sortedEdgesLL_head, "edges")) printf("\n Created edges added to the database successfully!! \n");
+  
+  printf("\n Total cost = %d \n", totalCost);
+  
+  // Recursive Test:
+//  struct edge* dupli_edgesLL_head = NULL;
+//  int tsTotal = assignClassroomsRec(sortedEdgesLL_head, dupli_edgesLL_head, classroomsLL_head, ts_count, 1);
+//  printf("\n Recursive Classroom Allocation \n");
+//  displaySortedEdgesLL(sortedEdgesLL_head);
+  //
   
   return 0;
 }
@@ -656,6 +667,62 @@ void displayClassroomsLL(struct classroom* h){
 //	return 1;
 //} 
 
+// A Function to assign classrooms for the linked list of edges (and allocating classrooms, conflict free)
+//int assignClassroomsRec(struct edge* sortedEdgesLL_head, struct edge* dupli_edgesLL_head, struct classroom* classroomsLL_head, int ts_count, int firstcall){ // LL has to be sorted by the timeslot
+//	
+//	struct edge* loop = NULL;
+//	loop = sortedEdgesLL_head;
+//	
+//	struct edge* dup_edgesLL_head = dupli_edgesLL_head;
+//	
+//	struct classroom* roomsLL_head = classroomsLL_head; // original list of classrooms. cantains all.
+//	struct classroom* copyOfclassroomsLL_head = NULL;
+//	//copyOfclassroomsLL_head = copyLL(classroomsLL_head); // making a copy of entire classrooms list.
+//	
+//	int current_timeslot = -1;
+//	int lastTs = ts_count; // current no. of timeslots
+//	int student_count = 0;
+//	
+//	// For all edges
+//	while(loop!=NULL){
+//		
+//		// get the current timeslot of the edge // if its a new time slot,
+//		if( (*loop).timeslot!=current_timeslot ){ // timeslot change
+//			deleteLL(&copyOfclassroomsLL_head);
+//			free(copyOfclassroomsLL_head);
+//			copyOfclassroomsLL_head = copyLL(roomsLL_head); // making a copy of entire classrooms list.
+//		}
+//		current_timeslot = (*loop).timeslot; // update current_timeslot
+//		
+//		student_count = getNoStudents( (*loop).batch ); // get the number of students of the batch from DB.
+//		struct classroom* bestRoom = chooseClassroom(student_count, copyOfclassroomsLL_head);// get the classroom id which has the just enough capacity.
+//		if (bestRoom!=NULL){ // A classroom found
+//			strcpy((*loop).roomid, (*bestRoom).roomid); // assign roomid to the edge.
+//			if ((*loop).timeslot>lastTs) lastTs = (*loop).timeslot;
+//			// remove that classroom node from the copyOfclassroomsLL.
+//			copyOfclassroomsLL_head = removeClassroomNode(copyOfclassroomsLL_head, (*bestRoom).roomno);
+//			
+//		} 
+//		else {
+//			strcpy((*loop).roomid, "UA");  // if there is no classrooms, assign "UA" // send to create a new timeslot // add the cost of extening hours	
+//			addNewEdge((*loop).lecid, (*loop).modid, (*loop).color_id, (*loop).batch, (lastTs + (*loop).timeslot), (*loop).roomid, dup_edgesLL_head);
+//		}
+//		
+//		
+//
+//		loop=(*loop).link; //1. Select the next edge and repeat step 5
+//    }
+//	
+//	deleteLL(&copyOfclassroomsLL_head);
+//	free(copyOfclassroomsLL_head);
+//	
+//	if (dup_edgesLL_head!=NULL){
+//		lastTs = assignClassroomsRec(dup_edgesLL_head, dup_edgesLL_head, roomsLL_head, lastTs, 0);
+//	}
+//	return lastTs;
+//} 
+
+
 // A Function to assign classrooms for the linked list of edges (and allocating classrooms, conflict free) // Returns updated total timeslots count
 int assignClassrooms(struct edge* sortedEdgesLL_head, struct classroom* classroomsLL_head, int ts_count){ // LL has to be sorted by the timeslot
 	
@@ -675,6 +742,7 @@ int assignClassrooms(struct edge* sortedEdgesLL_head, struct classroom* classroo
 		
 		// get the current timeslot of the edge // if its a new time slot,
 		if( (*loop).timeslot!=current_timeslot ){ // timeslot change
+			deleteLL(&copyOfclassroomsLL_head);
 			free(copyOfclassroomsLL_head);
 			copyOfclassroomsLL_head = copyLL(roomsLL_head); // making a copy of entire classrooms list.
 		}
@@ -707,6 +775,7 @@ int assignClassrooms(struct edge* sortedEdgesLL_head, struct classroom* classroo
 		loop=(*loop).link; //1. Select the next edge and repeat step 5
     }
 
+	deleteLL(&copyOfclassroomsLL_head);
 	free(copyOfclassroomsLL_head);
 	return lastTs;
 } 
@@ -817,6 +886,22 @@ struct classroom* removeClassroomNode(struct classroom* copyOfclassroomsLL_head,
     prev->link = temp->link;
     free(temp);
     return head; // head of the updated LL
+}
+
+void deleteLL(struct classroom** head_ref){
+   /* deref head_ref to get the real head */
+   struct classroom* current = *head_ref;
+   struct classroom* next;
+ 
+   while (current != NULL){
+       next = current->link;
+       free(current);
+       current = next;
+   }
+   
+   /* deref head_ref to affect the real head back
+      in the caller. */
+   *head_ref = NULL;
 }
 
 
