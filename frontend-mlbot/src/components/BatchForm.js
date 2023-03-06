@@ -53,7 +53,7 @@ const BatchForm = () => {
            <br/>
            {modules.map((module,index)=>(
             <label>
-                Module {index +1}
+                Module codes {index +1}
                 <input type= "text" value={module} onChange={(event) => setModules(modules.map((m, i) => (i === index ? event.target.value : m)))} />
             </label>
            ))}
