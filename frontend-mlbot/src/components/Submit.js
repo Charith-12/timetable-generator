@@ -94,14 +94,14 @@ const sendto_lecturers = async () => {
     }
 
  
-        for (let i = 0; i < lecturers.length; i++){
-            let lecturer = lecturers[i];
-             lecname = lecturer.name;
-             lecid = lecturer.lecid;
-             maxHours = lecturer.maxHours;
-             payRate = lecturer.payRate;
-             submiteachLecturer();
-        }
+    for (let i = 0; i < lecturers.length; i++){
+        let lecturer = lecturers[i];
+            lecname = lecturer.name;
+            lecid = lecturer.lecid;
+            maxHours = lecturer.maxHours;
+            payRate = parseInt(lecturer.payRate);
+            submiteachLecturer();
+    }
 
 
 

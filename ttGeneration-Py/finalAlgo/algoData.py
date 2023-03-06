@@ -321,15 +321,6 @@ class moduleNode:
 
 
 
-    
-
-
-
-
-
-
-
- 
 
 ## Generates a list of moduleNodes using the batch list and module list.
 
@@ -399,164 +390,137 @@ def comboGenerator(c,b,batchlist):
 
 
 
-def  randomComboGenerator(m):
+# def  randomComboGenerator(m):
     
     
-    #genrate random combos of classrooms from the matrix
-    # matrix = wasteMatrixGenerator(rooms,nodes)
+#     #genrate random combos of classrooms from the matrix
+#     # matrix = wasteMatrixGenerator(rooms,nodes)
 
-    # noRows = len(matrix)
-    # noColumns = len(matrix[0])
+#     # noRows = len(matrix)
+#     # noColumns = len(matrix[0])
 
-    # matrix = [[7,9,8],[3,8,2],[4,3,5]]
+#     # matrix = [[7,9,8],[3,8,2],[4,3,5]]
 
-    matrix = m
+#     matrix = m
 
     
-    duplicate_matrix = matrix[:]
-    noRows = len(duplicate_matrix)
-    noColumns = len(duplicate_matrix[0])
+#     duplicate_matrix = matrix[:]
+#     noRows = len(duplicate_matrix)
+#     noColumns = len(duplicate_matrix[0])
 
 
-    printMatrix(matrix)
-    print()
-    randomCombo = []
-    while(noColumns > 1):
+#     printMatrix(matrix)
+#     print()
+#     randomCombo = []
+#     while(noColumns > 1):
    
-        # randomCombo.append(matrix[0][random.randint(0,noColumns-1)])
+#         # randomCombo.append(matrix[0][random.randint(0,noColumns-1)])
         
 
-        #selects a random element from the first row
-        randColumn = random.randint(0,noColumns-1)
-        randomCombo.append(duplicate_matrix[0][randColumn])
+#         #selects a random element from the first row
+#         randColumn = random.randint(0,noColumns-1)
+#         randomCombo.append(duplicate_matrix[0][randColumn])
 
-        # remove the first row and selected column(random Column) from the matrix  and saves to a new matrix
-        newMatrix = []
-        for r in range(noRows):
-            if (r != 0):
-                newRow = []
+#         # remove the first row and selected column(random Column) from the matrix  and saves to a new matrix
+#         newMatrix = []
+#         for r in range(noRows):
+#             if (r != 0):
+#                 newRow = []
 
-                for c in range(noColumns):
+#                 for c in range(noColumns):
 
-                    if(c != randColumn):
-                        newRow.append(duplicate_matrix[r][c])
+#                     if(c != randColumn):
+#                         newRow.append(duplicate_matrix[r][c])
 
-                newMatrix.append(newRow)
+#                 newMatrix.append(newRow)
         
     
-        printMatrix(duplicate_matrix)
-        print()
-        print ("removed column: " +  str(randColumn))
-        printMatrix(newMatrix)
-        print()
+#         printMatrix(duplicate_matrix)
+#         print()
+#         print ("removed column: " +  str(randColumn))
+#         printMatrix(newMatrix)
+#         print()
     
-        duplicate_matrix = newMatrix[:]
-        noRows = len(duplicate_matrix)
-        noColumns = len(duplicate_matrix[0])
-            # duplicate_matrix = newMatrix[:]
-            # noRows = len(duplicate_matrix)
-            # noColumns = len(duplicate_matrix[0])
-    randomCombo.append(duplicate_matrix[0][0])
+#         duplicate_matrix = newMatrix[:]
+#         noRows = len(duplicate_matrix)
+#         noColumns = len(duplicate_matrix[0])
+#             # duplicate_matrix = newMatrix[:]
+#             # noRows = len(duplicate_matrix)
+#             # noColumns = len(duplicate_matrix[0])
+#     randomCombo.append(duplicate_matrix[0][0])
     
-    #sum all the weights in random combo 
-    t = 0
-    for i in randomCombo:
-        for j in i:
-         if isinstance(j['w'],int):
-            t = t + j['w']
-            print(j['w'])
+#     #sum all the weights in random combo 
+#     t = 0
+#     for i in randomCombo:
+#         for j in i:
+#          if isinstance(j['w'],int):
+#             t = t + j['w']
+#             print(j['w'])
         
 
-    # randomCombo['sumWaste'] = t
+#     # randomCombo['sumWaste'] = t
     
-    randomComboWeight = {'randomCombo':randomCombo, 'weight': t}
-    print("randomCombo: ")   
+#     randomComboWeight = {'randomCombo':randomCombo, 'weight': t}
+#     print("randomCombo: ")   
      
-    print(randomComboWeight)
-    return randomComboWeight
+#     print(randomComboWeight)
+#     return randomComboWeight
     
 
-def dictionaryGenerator(m):
+# def dictionaryGenerator(m):
     
-    matrix = m
-    noRows =  len(matrix)
+#     matrix = m
+#     noRows =  len(matrix)
 
-    combos = []
+#     combos = []
     
-    for i in range(noRows):
-        combos.append(randomComboGenerator(m))
-
-    
-    sortedCombos = sorted(combos, key = lambda x: x['weight'])
-
-    print()
-    print("Combos in ascending order:")
-    print()
-    for c in sortedCombos:
-        print(c) 
-    
-    i = 0
-    while ( i < len(sortedCombos)):
-        if (sortedCombos[i]['weight'] == sortedCombos[i-1]['weight']) and i:
-            sortedCombos[i]['prob'] = i
-            i = i + 1
-        else:
-            sortedCombos[i]['prob'] = i+1
-            i = i + 1
-
-    print()
-    print("combos sorted in ascending order with probility(bias) added")
-    print()
-    for c in sortedCombos:
-        print(c) 
-    
-    for combo in sortedCombos:
-        list = combo['randomCombo']
-        prob = combo['prob']
-        for l in list:
-            for ll in l:
-                cl = ll['c']
-                b = ll['b']
-                for c in Classrooms:
-                    if c.name == cl:
-                        if b in c.probabiltyDictonary:
-                            prob = c.probabiltyDictonary[b] + prob
-                            c.probabiltyDictonary.update({b:prob})
-                        c.probabiltyDictonary.update({b:prob})
-    
-    print()
-    print("Probilty(Bias) of a batch being present in a classroom")
-    print()
-    for c in Classrooms:
-        print(f"{c.name}: {c.probabiltyDictonary}")
-    print()
-
-
-
-
+#     for i in range(noRows):
+#         combos.append(randomComboGenerator(m))
 
     
-        
+#     sortedCombos = sorted(combos, key = lambda x: x['weight'])
 
-
-
-
-
-        
-            
-            
-
-
-        
-
-        
-
+#     print()
+#     print("Combos in ascending order:")
+#     print()
+#     for c in sortedCombos:
+#         print(c) 
     
-        
+#     i = 0
+#     while ( i < len(sortedCombos)):
+#         if (sortedCombos[i]['weight'] == sortedCombos[i-1]['weight']) and i:
+#             sortedCombos[i]['prob'] = i
+#             i = i + 1
+#         else:
+#             sortedCombos[i]['prob'] = i+1
+#             i = i + 1
 
-
-
-
+#     print()
+#     print("combos sorted in ascending order with probility(bias) added")
+#     print()
+#     for c in sortedCombos:
+#         print(c) 
+    
+#     for combo in sortedCombos:
+#         list = combo['randomCombo']
+#         prob = combo['prob']
+#         for l in list:
+#             for ll in l:
+#                 cl = ll['c']
+#                 b = ll['b']
+#                 for c in Classrooms:
+#                     if c.name == cl:
+#                         if b in c.probabiltyDictonary:
+#                             prob = c.probabiltyDictonary[b] + prob
+#                             c.probabiltyDictonary.update({b:prob})
+#                         c.probabiltyDictonary.update({b:prob})
+    
+#     print()
+#     print("Probilty(Bias) of a batch being present in a classroom")
+#     print()
+#     for c in Classrooms:
+#         print(f"{c.name}: {c.probabiltyDictonary}")
+#     print()
 
 
 
@@ -583,10 +547,34 @@ tSlotmodNodes = availablemodNodes[:]
 
 
 
+
+#code to check if there are batches which are bigger than existing classroom size and removes it.
+## Further on this code could be modified so it either display a notification to webapp that its too big or it splits batches in two.
+
+sortClassroom =sorted(Classrooms, key= lambda x: x.capacity)
+
+for b in Batches:
+    if sortClassroom[-1].capacity < b.batches.noStudents:
+        Batches.remove(b)
+
+
+
+
+#code to check if there are nodes which are can be merged to one. different batches have same module 
+
+
+                        
+
+
+
+
 def TTGenerator(timeslots):
 
     previousTime = None
     evenpreviousTime = None
+
+
+
 
     for t in timeslots:
 
@@ -627,14 +615,13 @@ def TTGenerator(timeslots):
                 # selects the cheapest node from the nodes list
        
                 cheapNode = moduleNode.lowestCost(selectionNodes,randClassroom)
+                #cheapnode of x is returned if there are no nodes which have a size bigger than the classroom.
                 if(cheapNode != 'X'):
                     anotherClasslist.append(randClassroom)
                     anotherNodelist.append(cheapNode)
 
-                    # dictionaryGenerator(wasteMatrixGenerator(anotherClasslist,anotherNodelist))
 
-                
-
+            
 
                     
 
@@ -644,14 +631,16 @@ def TTGenerator(timeslots):
                 #  
                 #Adds the selected nodes to the tt properties in classromm tt , main tt, and batch tt,lecturer tt
                 if(cheapNode != 'X'):
-                    tt.append(ttSlot(t,randClassroom,cheapNode))
-                    randClassroom.tt.append(ttSlot(t,randClassroom,cheapNode))
-                    for b in Batches:
-                        if(b.batchName == cheapNode.batchName):
-                            b.tt.append(ttSlot(t,randClassroom,cheapNode))
-                    for l in Lecturers:
-                        if(l.lecid == cheapNode.lecID):
-                            l.tt.append(ttSlot(t,randClassroom,cheapNode))    
+
+
+                    # tt.append(ttSlot(t,randClassroom,cheapNode))
+                    # randClassroom.tt.append(ttSlot(t,randClassroom,cheapNode))
+                    # for b in Batches:
+                    #     if(b.batchName == cheapNode.batchName):
+                    #         b.tt.append(ttSlot(t,randClassroom,cheapNode))
+                    # for l in Lecturers:
+                    #     if(l.lecid == cheapNode.lecID):
+                    #         l.tt.append(ttSlot(t,randClassroom,cheapNode))    
 
                     #removes it from availablenodes list and selection list
                     availablemodNodes.remove(cheapNode)
@@ -675,41 +664,29 @@ def TTGenerator(timeslots):
                     selectionNodes.extend(addbacklist)
 
 
-        for n in anotherNodelist:
+
                     print('batch: ' + n.batchName)
- 
 
-        newWasteMatrix = wasteMatrixGenerator(anotherClasslist,)
-        dictionaryGenerator (newWasteMatrix)
 
-        for c in anotherClasslist: 
+        # This code matches the smallest classroom with the smallest selected node so it minimizes the wastage of resources.
 
-            highestProb = 0
-            highestProbBatch = ''
-            for n in anotherNodelist:
-                if n.batchName in c.probabiltyDictonary:
-                    prob = c.probabiltyDictonary[n.batchName]
-                    if prob > highestProb:
-                        highestProb = prob
-                        highestProbBatch = n.batchName
+        anotherClasslist = sorted(anotherClasslist, key= lambda x: x.capacity )
+        anotherNodelist = sorted(anotherNodelist, key = lambda x: x.noStudents)
 
-            
+        for i in range(len(anotherClasslist)):
 
-            highestProbBatch
-            
+            tt.append(ttSlot(t,anotherClasslist[i],anotherNodelist[i]))
+            randClassroom.tt.append(ttSlot(t,anotherClasslist[i],anotherNodelist[i]))
+            for b in Batches:
+                if(b.batchName == anotherNodelist[i].batchName):
+                    b.tt.append(ttSlot(t,anotherClasslist[i],anotherNodelist[i]))
+            for l in Lecturers:
+                if(l.lecid == anotherNodelist[i].lecID):
+                    l.tt.append(ttSlot(t,anotherClasslist[i],anotherNodelist[i])) 
 
             
 
-
-
-                    
-
-
-        
-
-
-        
-
+            
 
         # for c in Classrooms: 
 

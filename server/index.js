@@ -63,7 +63,7 @@ app.post("/api/insert", (req,res) => {
                 const  lec_name = req.body.lec_name
                 const lec_id = req.body.lec_id
                 const maxHours = req.body.maxHours
-                const payRate = req.body.payRate
+                const payRate = parseInt(req.body.payRate)
                 
                 const sqlInsert = 
                   "INSERT INTO lecturers (lec_id,lec_name,max_hours,pay_rate) VALUES (?,?,?)";
