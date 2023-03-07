@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: Jan 28, 2023 at 03:05 AM
--- Server version: 8.0.32-0buntu0.22.04.1
--- PHP Version: 8.1.2-1ubuntu2.10
+-- Generation Time: Mar 07, 2023 at 09:06 PM
+-- Server version: 8.0.32-0ubuntu0.22.04.2
+-- PHP Version: 8.1.2-1ubuntu2.11
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -108,8 +108,8 @@ INSERT INTO `edges` (`lec_id`, `mod_id`, `color_id`, `batch_id`, `timeslot`, `ro
 CREATE TABLE `lecturers` (
   `lec_id` varchar(255) NOT NULL,
   `lec_name` varchar(255) DEFAULT NULL,
-  `no_subjects` int NOT NULL,
-  `wl` int NOT NULL
+  `no_subjects` int DEFAULT '0',
+  `wl` int DEFAULT '0'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
@@ -117,9 +117,9 @@ CREATE TABLE `lecturers` (
 --
 
 INSERT INTO `lecturers` (`lec_id`, `lec_name`, `no_subjects`, `wl`) VALUES
-('L001', 'W.A.Jananayake', 2, 4),
-('L002', 'J.K.Kudaligama', 3, 5),
-('L003', 'R.P.Gunasena', 1, 2);
+('L001', 'W.A.Jananayake', 0, 0),
+('L002', 'J.K.Kudaligama', 0, 0),
+('L003', 'R.P.Gunasena', 0, 0);
 
 -- --------------------------------------------------------
 
