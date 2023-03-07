@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: Mar 07, 2023 at 09:06 PM
+-- Generation Time: Mar 08, 2023 at 03:14 AM
 -- Server version: 8.0.32-0ubuntu0.22.04.2
 -- PHP Version: 8.1.2-1ubuntu2.11
 
@@ -42,6 +42,29 @@ INSERT INTO `batches` (`batch_id`, `batch_name`, `no_students`) VALUES
 (2, 'Tele Eng - Batch 6', 120),
 (3, 'Civil Eng - Batch 6', 48),
 (4, 'Mech Eng - Batch 6', 32);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `bmallocations`
+--
+
+CREATE TABLE `bmallocations` (
+  `batch_id` int NOT NULL,
+  `mod_id` varchar(255) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+--
+-- Dumping data for table `bmallocations`
+--
+
+INSERT INTO `bmallocations` (`batch_id`, `mod_id`) VALUES
+(1, 'ECS100'),
+(1, 'ECS101'),
+(1, 'EMA200'),
+(2, 'EMA202'),
+(2, 'EMA204'),
+(2, 'EMN300');
 
 -- --------------------------------------------------------
 
@@ -154,7 +177,7 @@ CREATE TABLE `modules` (
   `mod_id` varchar(255) NOT NULL,
   `mod_name` varchar(255) DEFAULT NULL,
   `credits` int NOT NULL,
-  `batch_id` int NOT NULL,
+  `batch_id` int DEFAULT NULL,
   `al_status` tinyint(1) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
@@ -163,12 +186,12 @@ CREATE TABLE `modules` (
 --
 
 INSERT INTO `modules` (`mod_id`, `mod_name`, `credits`, `batch_id`, `al_status`) VALUES
-('ECS100', 'Operating Systems', 2, 1, 1),
-('ECS101', 'Data Structures', 2, 1, 1),
-('EMA200', 'Linear Algebra', 2, 1, 1),
-('EMA202', 'Numerical Methods', 2, 2, 1),
-('EMA204', 'Calculus', 1, 2, 1),
-('EMN300', 'Statistics', 2, 2, 1);
+('ECS100', 'Operating Systems', 2, 0, 1),
+('ECS101', 'Data Structures', 2, 0, 1),
+('EMA200', 'Linear Algebra', 2, 0, 1),
+('EMA202', 'Numerical Methods', 2, 0, 1),
+('EMA204', 'Calculus', 1, 0, 1),
+('EMN300', 'Statistics', 2, 0, 1);
 
 --
 -- Indexes for dumped tables
@@ -179,6 +202,12 @@ INSERT INTO `modules` (`mod_id`, `mod_name`, `credits`, `batch_id`, `al_status`)
 --
 ALTER TABLE `batches`
   ADD PRIMARY KEY (`batch_id`);
+
+--
+-- Indexes for table `bmallocations`
+--
+ALTER TABLE `bmallocations`
+  ADD PRIMARY KEY (`batch_id`,`mod_id`);
 
 --
 -- Indexes for table `classrooms`
