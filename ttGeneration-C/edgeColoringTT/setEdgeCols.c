@@ -247,7 +247,7 @@ struct subject* getSubjects(char lecid[], int nos){
 	int i = 0; // index of the array
 	
 	char queryStr[250]; 
-	sprintf(queryStr, "SELECT m.mod_id, m.credits, m.batch_id FROM modules m INNER JOIN lmallocations a ON m.mod_id = a.mod_id AND a.lec_id = '%s' ORDER BY credits", lecid);
+	sprintf(queryStr, "SELECT m.mod_id, m.credits, b.batch_id FROM modules m INNER JOIN bmallocations b ON m.mod_id = b.mod_id INNER JOIN lmallocations a ON m.mod_id = a.mod_id AND a.lec_id = '%s' ORDER BY credits", lecid);
 	//printf("\n%s\n", queryStr);
 	
 	/* send SQL query */
