@@ -309,7 +309,7 @@ import React, { useState, useEffect } from 'react';
 const LecturerForm = () => {
   const [lecturers, setLecturers] = useState([]);
   const [name, setName] = useState('');
-  const [lecid, setlecid] = useState(0);
+  const [lecid, setlecid] = useState('');
   const [lecModules, setLecModules] = useState(['']);
   const [maxHours, setMaxHours] = useState();
   const [payRate, setpayRate] = useState('');
@@ -346,12 +346,12 @@ const LecturerForm = () => {
     }
   };
 
-  const handleIDchange = (event) => {
-    const value = event.target.value;
-    if (value >= 0) {
-      setlecid(value);
-    }
-  };
+  // const handleIDchange = (event) => {
+  //   const value = event.target.value;
+  //   if (value >= 0) {
+  //     setlecid(value);
+  //   }
+  // };
 
   const addModule = () => {
     setLecModules([...lecModules, '']);
@@ -383,7 +383,7 @@ const LecturerForm = () => {
     console.log(lecturers);
     setName('');
     setLecModules([' ']);
-    setlecid(0);
+    setlecid('');
     setMaxHours(0);
     handleRemove();
   };
@@ -402,7 +402,7 @@ const LecturerForm = () => {
         <br />
         <label>
           Lecturer ID:
-          <input type="number" value={lecid} onChange={handleIDchange} />
+          <input type="text" value={lecid} onChange={(event) => setlecid(event.target.value)} />
         </label>
         <br />
         <p>Teachable Modules [Module Codes]</p>
