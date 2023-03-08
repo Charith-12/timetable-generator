@@ -299,7 +299,7 @@ def TimeSlotsGen(startTime,endTime,startDay,endDay):
         i = i + 1
     timeSlots.append(TimeSlot(endTime,endDay,i))
     
-TimeSlotsGen(1,12,1,5)
+TimeSlotsGen(beginTime,closeTime,1,5)
 
 # Class whcih represents a possible combination between batch, module and lecturer as well as a node.
 #  The node also includes the cost of selecting it.
@@ -799,9 +799,9 @@ while (len(availablemodNodes) > 0 and xDay <= 7):
     TimeSlotsGen(xTime,xTime + 1,xDay,xDay)
     totalCost = totalCost + TTGenerator(timeSlots)
     xTime = xTime + 1
-    if(xTime == 24):
+    if(xTime >= 24):
         xDay = xDay + 1
-        xTime == 0
+        xTime = 0
 
 
 
@@ -815,7 +815,7 @@ for slot in tt:
 
 print()
 print()
-print("this is the total cost of the algorithm: " +totalCost)
+print("this is the total cost of the algorithm: " +str(totalCost))
 # wasteMatrixGenerator(tslotClassroom,tSlotmodNodes)
 #  
 
