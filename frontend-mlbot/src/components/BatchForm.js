@@ -3,6 +3,7 @@ import React, { useState } from 'react'
 const BatchForm = () => {
     const [batches,setBatches] = useState([]); 
     const[batchName,setBatchName] = useState('');
+    const[batchid,setBatchid] = useState(0);
     const[modules,setModules] = useState(['']);
     const[numStudents,setNumStudents] = useState();
 
@@ -18,15 +19,16 @@ const BatchForm = () => {
       };
 
       class Batch {
-        constructor(name,modules,numStudents){
+        constructor(name,id,modules,numStudents){
           this.name = name;
+          this.id = id
           this.modules = modules;
           this.numStudents = numStudents;
         }
       }
 
       const addBatch = () => {
-       const newBatch = new Batch(batchName,modules,numStudents);
+       const newBatch = new Batch(batchName,batchid,modules,numStudents);
        setBatches(prevBatches => {
         const updatedBatches = [...prevBatches, newBatch];
         localStorage.setItem('batches', JSON.stringify(updatedBatches));
@@ -37,6 +39,7 @@ const BatchForm = () => {
        console.log(batches);
        localStorage.setItem('batches', JSON.stringify(batches));
        setBatchName('');
+       setBatchid(0);
        setModules(['']);
        setNumStudents(0);
        
@@ -51,6 +54,12 @@ const BatchForm = () => {
             <input type = "text" value = {batchName} onChange={(event) => setBatchName(event.target.value)}/>
            </label>
            <br/>
+           <label>
+            Batch id:
+            <input type = "number" min={0} value = {batchid} onChange={(event) => setBatchid(event.target.value)}/>
+           </label>
+           <br/>
+           
            {modules.map((module,index)=>(
             <label>
                 Module codes {index +1}
@@ -64,7 +73,7 @@ const BatchForm = () => {
       <br />
       <label>
         Number of Students:
-        <input type="number" value={numStudents} onChange={handleNumStudentsChange} />
+        <input type="number"  min={0} value={numStudents} onChange={handleNumStudentsChange} />
       </label>
 
       <br />

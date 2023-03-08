@@ -35,11 +35,12 @@ app.post("/api/insert", (req,res) => {
 
 
         const  batch_name = req.body.batch_name
+        const batchid = req.body.batchid
         const no_students = req.body.no_students
         
         const sqlInsert = 
-          "INSERT INTO batches (batch_name, no_students) VALUES (?,?)";
-        db.query(sqlInsert, [batch_name, no_students], (err,result) => {
+          "INSERT INTO batches (batch_name, no_students, batchid) VALUES (?,?,?)";
+        db.query(sqlInsert, [batch_name, no_students, batchid], (err,result) => {
         console.log( result);
         });
         });
@@ -63,10 +64,10 @@ app.post("/api/insert", (req,res) => {
                 const  lec_name = req.body.lec_name
                 const lec_id = req.body.lec_id
                 const maxHours = req.body.maxHours
-                const payRate = parseInt(req.body.payRate)
+                const payRate = req.body.payRate
                 
                 const sqlInsert = 
-                  "INSERT INTO lecturers (lec_id,lec_name,max_hours,pay_rate) VALUES (?,?,?)";
+                  "INSERT INTO lecturers (lec_id,lec_name,max_hours,pay_rate) VALUES (?,?,?,?)";
                 db.query(sqlInsert, [lec_id,lec_name,maxHours,payRate], (err,result) => {
                     if(err){
                         console.log(err);
@@ -101,11 +102,12 @@ app.post("/api/insert", (req,res) => {
 
                         const batch_name = req.body.batchname
                         const module_code = req.body.module_code
+                        const batchid = req.body.batchid
                        
                         
                         const sqlInsert = 
-                          "INSERT INTO batch_modules (batch_name,module_code) VALUES (?,?)";
-                        db.query(sqlInsert, [batch_name,module_code], (err,result) => {
+                          "INSERT INTO batch_modules (batch_name,module_code,batchid) VALUES (?,?,?)";
+                        db.query(sqlInsert, [batch_name,module_code,batchid], (err,result) => {
                             if(err){
                                 console.log(err);
                                 return res.status(500).send(err);
@@ -236,6 +238,32 @@ app.get('/api/retrive/batchNames', (req, res) => {
   });
 });
 
+
+const { spawn } = require('child_process');
+
+
+
+app.get('/run-python', (req, res) => {
+  const pythonProcess = spawn('python', ['algoData.py']);
+
+  pythonProcess.stdout.on('data', (data) => {
+    console.log(`stdout: ${data}`);
+  });
+
+  pythonProcess.stderr.on('data', (data) => {
+    console.error(`stderr: ${data}`);
+  });
+
+  pythonProcess.on('close', (code) => {
+    console.log(`child process exited with code ${code}`);
+    res.send(`Python script executed with code ${code}`);
+  });
+});
+
+
+
+
 app.listen(3001,() =>{
     console.log("running on port 3001");
 });
+

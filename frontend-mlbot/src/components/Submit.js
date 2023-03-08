@@ -42,12 +42,14 @@ const getlocal_modules =() => {
     getlocal_batches();
 
  let batchName = "";
+ let batchid = 0;
  let noStudents = 0;
     
     const submiteachBatch = () => {
         try {
         axios.post('http://localhost:3001/api/insert/batches',{
           batch_name: batchName,
+          batchid: batchid,
           no_students: noStudents,
         }).then(() =>{
           alert("succesful insert");
@@ -59,6 +61,7 @@ const getlocal_modules =() => {
         for (let i = 0; i < batches.length; i++){
             let batch = batches[i];
              batchName = batch.name;
+             batchid = batch.id;
              noStudents = batch.numStudents;
              submiteachBatch();
         }
@@ -74,19 +77,19 @@ const sendto_lecturers = async () => {
  getlocal_lecturers();
 
     let lecname = '';
-    let lecid = 0;
+    let lecid = '';
     let maxHours = 0;
     let payRate = 0;
 
     const submiteachLecturer = () => {
+        console.log("this is the pay rate: " + payRate);
         try {
         axios.post('http://localhost:3001/api/insert/lecturers',{
-          lec_id: lecid,
+          lec_id: lecid.trim(),
           lec_name: lecname,
           maxHours: maxHours,
           payRate : payRate,
         }).then(() =>{
-          alert("succesful insert to lectr");
         });}
         catch(error){
             console.log(error);
@@ -99,7 +102,7 @@ const sendto_lecturers = async () => {
             lecname = lecturer.name;
             lecid = lecturer.lecid;
             maxHours = lecturer.maxHours;
-            payRate = parseInt(lecturer.payRate);
+            payRate = lecturer.payRate;
             submiteachLecturer();
     }
 
@@ -150,8 +153,8 @@ const sendto_lec_modules = async () => {
     const submiteachLecMod = () => {
      try {
      axios.post('http://localhost:3001/api/insert/lec_modules',{
-       lec_id: lec_id,
-       module_code: module_code,
+       lec_id: lec_id.trim(),
+       module_code: module_code.trim(),
      }).then(() =>{
        alert("succesful insert to lec_modules");
      });}
@@ -175,6 +178,7 @@ const sendto_lec_modules = async () => {
 const sendto_batch_modules = async () => {
 
    let batch_name = ''
+   let batchid = 0
    let batchmodules = []
    let module_code = ''
 
@@ -183,6 +187,7 @@ const sendto_batch_modules = async () => {
     axios.post('http://localhost:3001/api/insert/batch_modules',{
       batchname: batch_name,
       module_code: module_code,
+      batchid: batchid
     }).then(() =>{
       alert("succesful insert to batch_modules");
     });}
@@ -195,6 +200,7 @@ const sendto_batch_modules = async () => {
     let batch = batches[i];
      batch_name = batch.name;
      batchmodules = batch.modules;
+     batchid = batch.id;
         for (let j = 0 ; j< batchmodules.length; j++){
             module_code =  batchmodules[j]
             submiteachBatchMod();
