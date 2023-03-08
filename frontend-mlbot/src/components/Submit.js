@@ -10,6 +10,7 @@ function Submit () {
     const [batches,setbatches] = useState('');
     const [lecturers,setlecturers] = useState('');
     const [modules,setmodules] = useState('');
+    
 
 
 

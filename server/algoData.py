@@ -17,15 +17,17 @@ conn = mysql.connector.connect(
 Batches = [ ]
 
 class BatchName:
-    def __init__(self,batchName,noStu):
+    def __init__(self,batchName,noStu,batchid):
         self.batchName = batchName
         self.noStu = noStu
+        self.batchid = batchid
 
 class BatchMod:
-    def __init__(self,batchName,module_code,bmodID):
+    def __init__(self,batchName,module_code,bmodID,batchid):
         self.batchName = batchName
         self.module_code = module_code
         self.bmodID = bmodID
+        self.batchid = batchid
         
 
     
@@ -236,7 +238,7 @@ Classrooms = [c1,c2,c3]
 
 
 
-          ######################################################################################################
+          ######################################################Constraints######################################################
 
 costofNewHire  = 1000
 costofExtendDay = 300
@@ -591,7 +593,7 @@ for b in Batches:
 
 
 def TTGenerator(timeslots):
-
+    ttCost = 0
     previousTime = None
     evenpreviousTime = None
 
@@ -705,6 +707,7 @@ def TTGenerator(timeslots):
             for l in Lecturers:
                 if(l.lecid == anotherNodelist[i].lecID):
                     l.tt.append(ttSlot(t,anotherClasslist[i],anotherNodelist[i])) 
+            ttCost = ttCost + anotherNodelist[i].cost
 
             
 
@@ -775,10 +778,14 @@ def TTGenerator(timeslots):
         evenpreviousTime = previousTime
         previousTime = t    
         selectionClassrooms = Classrooms[:]
+    
+    return ttCost
+    
+    
  
+totalCost = 0
 
-
-TTGenerator(timeSlots)
+totalCost = totalCost + TTGenerator(timeSlots)
  
 
 ## If the available timeslots are not enough then the reminig modules are assingned by first extending the day
@@ -790,7 +797,7 @@ xDay = beginDay
 while (len(availablemodNodes) > 0 and xDay <= 7): 
     timeSlots = []  
     TimeSlotsGen(xTime,xTime + 1,xDay,xDay)
-    TTGenerator(timeSlots)
+    totalCost = totalCost + TTGenerator(timeSlots)
     xTime = xTime + 1
     if(xTime == 24):
         xDay = xDay + 1
@@ -806,6 +813,9 @@ for slot in tt:
     slot.printTTSlot()
     print(" ")
 
+print()
+print()
+print("this is the total cost of the algorithm: " +totalCost)
 # wasteMatrixGenerator(tslotClassroom,tSlotmodNodes)
 #  
 
