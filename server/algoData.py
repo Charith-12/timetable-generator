@@ -231,8 +231,8 @@ class Classroom:
 
 
 c1 = Classroom('c1',25)
-c2 = Classroom('c2',40)
-c3 = Classroom('c3',20)
+c2 = Classroom('c2',140)
+c3 = Classroom('c3',120)
 
 Classrooms = [c1,c2,c3] 
 
