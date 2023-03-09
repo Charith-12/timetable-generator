@@ -37,6 +37,9 @@ function Timetable() {
   const [data,setData] = useState([''])
   const [batches,setbatches] = useState([]);
   const[batchNames,setbatchNames] = useState([])
+  const time = new Date(); 
+  const [startTime,setStartTime] = useState(0);
+  
 
 
   const [timetableData, setTimetableData] = useState();
@@ -92,6 +95,14 @@ setNumHours(maxHour )
 }
   }
 
+  const getStartTime = () => {
+    const timeValue = localStorage.getItem('openTime'); 
+    time.setHours(timeValue.slice(0, 2)); 
+    time.setMinutes(timeValue.slice(3)); 
+    setStartTime(time.getHours())
+    console.log("heres the hour:    " + time.getHours())
+  }
+
 
 
 
@@ -117,6 +128,7 @@ const runRemotePy= () => {
 
 
   const runPyAlgo = () => {
+    getStartTime()
     getlocal_batches();
     runRemotePy();
   }
@@ -140,7 +152,7 @@ return(
         <tbody>
           {[...Array(numHours)].map((_, index) => (
             <tr key={index}>
-              <td style={{ border: "1px solid black" }}>{index + 1}</td> {/* row label with hour number */}
+              <td style={{ border: "1px solid black" }}>{ startTime +  index }</td> {/* row label with hour number */}
               {daysOfWeek.map((day) => {
                 const item = data.find((d) => d.batch === batchName && d.day ===  day.number && d.hour === (index+1).toString());
                 return (
