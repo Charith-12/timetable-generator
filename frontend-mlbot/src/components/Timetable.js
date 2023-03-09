@@ -152,9 +152,9 @@ return(
         <tbody>
           {[...Array(numHours)].map((_, index) => (
             <tr key={index}>
-              <td style={{ border: "1px solid black" }}>{ startTime +  index }</td> {/* row label with hour number */}
+              <td style={{ border: "1px solid black" }}>{ startTime +  index  }</td> {/* row label with hour number */}
               {daysOfWeek.map((day) => {
-                const item = data.find((d) => d.batch === batchName && d.day ===  day.number && d.hour === (index+1).toString());
+                const item = data.find((d) => d.batch === batchName && d.day ===  day.number && d.hour === (startTime + index).toString());
                 return (
                   <td key={`${day.number}`} style={{ border: "1px solid black" }}>                    
                     {item ?  " batch: " + item.batch + " module: " + item.module + " lecturer: " + item.lecturer + " classroom: " +  item.classroom :" ------------------------------"}
