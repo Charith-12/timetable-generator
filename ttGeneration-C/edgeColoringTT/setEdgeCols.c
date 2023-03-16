@@ -175,9 +175,15 @@ MYSQL* connectDB(){
 	
 	MYSQL* con;
 	
+	// char* server = "localhost";
+	// char* user = "cadevs";
+	// char* password = "P@ssword123"; /*password*/
+	// char* database = "university";
+
 	char* server = "localhost";
-	char* user = "cadevs";
-	char* password = "P@ssword123"; /*password*/
+	// char* user = "cadevs";
+	char* user = "root";
+	char* password = "adithya1"; /*password*/
 	char* database = "university";
 	
 	con = mysql_init(NULL);

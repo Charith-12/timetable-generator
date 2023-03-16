@@ -10,11 +10,8 @@ function Submit () {
     const [batches,setbatches] = useState('');
     const [lecturers,setlecturers] = useState('');
     const [modules,setmodules] = useState('');
+    const [lecmods,setlecmods] = useState([]);
     
-
-
-
-
 const getlocal_batches = () => {
  
     
@@ -33,6 +30,12 @@ const  getlocal_lecturers =() => {
 const getlocal_modules =() => {
     if(localStorage.getItem('ModuleInfoArray')){
         setmodules(JSON.parse(localStorage.getItem('ModuleInfoArray')))
+    }
+}
+
+const getlocal_lecmods = () =>{
+    if(localStorage.getItem('lecmodalloc')){
+        setlecmods(JSON.parse(localStorage.getItem('lecmodalloc')))
     }
 }
 
@@ -66,12 +69,7 @@ const getlocal_modules =() => {
              noStudents = batch.numStudents;
              submiteachBatch();
         }
-
-
-  
-     
-
-
+ 
 }
 
 const sendto_lecturers = async () => {
@@ -118,6 +116,7 @@ const  sendto_module = async () => {
     let modname = '';
     let modecode = 0;
     let credits = 0;
+    let uniqueBatch = 0;
 
     const submiteachModule = () => {
         try {
@@ -125,6 +124,7 @@ const  sendto_module = async () => {
           modename: modname,
           modecode: modecode,
           credits: credits,
+          batch: uniqueBatch
         }).then(() =>{
           alert("succesful insert to lectr");
         });}
@@ -139,8 +139,36 @@ const  sendto_module = async () => {
              modname = module.name;
              modecode =  module.code;
              credits =  module.credits;
+             uniqueBatch = module.uniqueBatch;
              submiteachModule();
         }
+
+
+}
+
+
+const sendto_lmallocations = async () => {
+    getlocal_lecmods();
+
+    let lec = 0;
+    let mod = 0;
+
+    const submiteach_lmalloc = () => {
+        try {
+            axios.post('http://localhost:3001/api/insert/lmalloc',{
+                lec_id: lec,
+                mod_id: mod
+            })
+        } catch (error) {
+            console.error(error)
+        }
+    }
+
+    lecmods.map((obj)=>{
+        lec = obj.lec;
+        mod = obj.mod;
+        submiteach_lmalloc();
+    })
 
 
 }
@@ -279,6 +307,7 @@ async function SendtoDB() {
         await sendto_lecturers();
         await sendto_batch_modules();
         await sendto_lec_modules();
+        await sendto_lmallocations();
         await sendto_constraints();
         alert("Data sent successfully");
     } catch (error) {

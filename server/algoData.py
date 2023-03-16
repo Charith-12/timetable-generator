@@ -1,5 +1,5 @@
 import random
-import mysql.connector
+import pymysql
 
 
 
@@ -7,11 +7,17 @@ import mysql.connector
 ##################################################################################################################################
 
 # Connect to database
-conn = mysql.connector.connect(
-    host='localhost',
-    user='root',
-    password='adithya889',
-    database= 'fypdatabase'
+# conn = mysql.connector.connect(
+#     host='localhost',
+#     user='username',
+#     password='password',
+#     database= 'fypdatabase'
+# )
+
+conn = pymysql.connect(host='localhost',
+                             user='username',
+                             password='password',
+                             db='fypdatabase',
 )
 
 Batches = [ ]

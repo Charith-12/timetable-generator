@@ -39,10 +39,18 @@ function Timetable() {
   const[batchNames,setbatchNames] = useState([])
   const time = new Date(); 
   const [startTime,setStartTime] = useState(0);
-  
+  const [endTime,setEndTime] = useState(0);
+  const[ al,setAl] = useState('none')
 
 
   const [timetableData, setTimetableData] = useState();
+  const [edgeData,setEdgeDatas] = useState([{
+    lec_id: 'Ltest',
+    mod_id: 'EMNTest',
+    batch_id: 2,
+    timeSlot: 6,
+    room_id: 'FF2'    
+  }]);
 
 
   const createBatchObjects = () =>  {
@@ -68,21 +76,28 @@ function Timetable() {
     createBatchObjects(data);
 
 
-  let maxHour = 0;
+//   let maxHour = 0;
 
-for (let i = 0; i < data.length; i++) {
-  const hour = parseInt(data[i].hour);
-  if (hour > maxHour) {
-    maxHour = hour;
-  }
-}   
-setNumHours(maxHour )
+// for (let i = 0; i < data.length; i++) {
+//   const hour = parseInt(data[i].hour);
+//   if (hour > maxHour) {
+//     maxHour = hour;
+//   }
+// }   
+setNumHours(24 -startTime)
    
   }
 
+  const fetchEdges = async () => {
+    const response = await fetch('http://localhost:3001/api/edges');
+    const data = await response.json();
+    setEdgeDatas(data);
+    
+    setNumHours(endTime - startTime);
+
+  }
 
 
-  
 
   const getlocal_batches = () => {
     if(localStorage.getItem('batches')){
@@ -100,15 +115,16 @@ setNumHours(maxHour )
     time.setHours(timeValue.slice(0, 2)); 
     time.setMinutes(timeValue.slice(3)); 
     setStartTime(time.getHours())
-    console.log("heres the hour:    " + time.getHours())
+    console.log("heres the start hour:    " + time.getHours())
   }
 
-
-
-
-
-
-
+  const getEndtime = () => {
+    const timeValue = localStorage.getItem('closeTime');
+    time.setHours(timeValue.slice(0,2));
+    time.setMinutes(timeValue.slice(3));
+    setEndTime(time.getHours());
+    console.log("heres the end time:    " + time.getHours())
+  }
 
 
  
@@ -128,12 +144,24 @@ const runRemotePy= () => {
 
 
   const runPyAlgo = () => {
-    getStartTime()
+    setAl("Py");
+    getStartTime();
     getlocal_batches();
     runRemotePy();
   }
 
-return(
+  const runCAlgo =  async() =>{
+    setAl("C");
+    getStartTime();
+    getlocal_batches();
+    getEndtime();
+    fetchEdges();
+    
+   
+  }
+
+  if (al === "Py") {
+    return(
   <div>
   {batchNames.map(batchName => (
   <div>
@@ -170,6 +198,7 @@ return(
   ))}
       <button 
         className="button"
+        onClick={runCAlgo}
  >Generate with Algo 1</button>
  <button 
         className="button"
@@ -178,6 +207,77 @@ return(
     </div>
 
 );
+  } else if(al === 'C'){
+
+    return(
+
+      <div>
+      {batches.map(batch=> (
+      <div>
+        <h1>{batch.id}</h1>
+          <table style={{ borderCollapse: "collapse", border: "1px solid black" }}>
+            <thead>
+              <tr>
+                <th style={{ border: "1px solid black" }}></th> {/* empty cell at top-left corner */}
+                {daysOfWeek.map((day) => (
+                  <th key={day} style={{ border: "1px solid black" }}>
+                    {day.name}
+                  </th>
+                ))}
+              </tr>
+            </thead>
+            <tbody>
+              {[...Array(numHours)].map((_, index) => (
+                <tr key={index}>
+                  <td style={{ border: "1px solid black" }}>{ startTime +  index  }</td> {/* row label with hour number */}
+                  {daysOfWeek.map((day) => {
+                    const item = edgeData.find((d) => d.batch_id.toString() === batch.id && (d.timeSlot - (numHours * (day.number-1))) === (index + 1));
+                    // const item = edgeData.find((d) => d.batch_id.toString() === batch.id);
+                    // && (d.timeSlot - (numHours * (day.number-1))) === index + 1
+                    // const item = edgeData[0] ;
+                    return (
+                      <td key={`${day.number}`} style={{ border: "1px solid black" }}>    
+                      {/* {item ?  " batch id: " + item.batch_id.toString() :" ------------------------------"}                 */}
+                        {item ?  " batch id: " + item.batch_id.toString() + " module: " + item.mod_id + " lecturer: " + item.lec_id + " classroom: " +  item.room_id :" ------------------------------"}
+                       {/* { "gr"} */}
+                      </td>
+                    );
+                  })}
+                </tr>
+              ))}
+            </tbody>
+          </table>
+          </div>
+      ))}
+          <button 
+            className="button"
+            onClick={runCAlgo}
+     >Generate with Algo 1</button>
+     <button 
+            className="button"
+            onClick={runPyAlgo}
+     >Generate with Algo 2</button>
+        </div>
+    );
+
+  }else{
+   return(
+    <div>
+            <button 
+        className="button"
+        onClick={runCAlgo}
+ >Generate with Algo 1</button>
+ <button 
+        className="button"
+        onClick={runPyAlgo}
+ >Generate with Algo 2</button>
+    </div>
+   );
+  }
+
+ 
+
+
 
 
 }

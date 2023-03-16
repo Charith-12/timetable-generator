@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
 
 class ModuleInfo{
-  constructor(name, code, credits) {
+  constructor(name, code, credits,uniqueBatch) {
     this.name = name;
     this.code = code;
     this.credits = credits;
+    this.uniqueBatch = uniqueBatch;
 }
 }
 
@@ -18,34 +19,21 @@ function Modules (props) {
   const [modName, setModName] = useState('');
   const[modCode,setModCode] = useState('');
   const[credits,setCredits] = useState(0);
+  const[uniqueBatch,setUniqueBatch] = useState(0);
   // const [lecturer, setLecturer] = useState([]);
   const[ModuleArray,setModuleArray] = useState([]);
   let showNextButton = false;
 
 
+
+  
+
+
  
-  // const handleAddLecture = () => {
-  //   const newLecturer = [...lecturer];
-  //   newLecturer.push('');
-  //   setLecturer(newLecturer);
-  // };
 
-  // const handleLectureChange = index => event => {
-  //   const newLecturer = [...lecturer];
-  //   newLecturer[index] = event.target.value;
-  //   setLecturer(newLecturer);
-  // };
-
-  // const addBatch = () => {
-  //   const newBatch = new Batch(batchName,modules,numStudents);
-  //   setBatches(prevBatches => {
-  //    const updatedBatches = [...prevBatches, newBatch];
-  //    localStorage.setItem('batches', JSON.stringify(updatedBatches));
-  //    return updatedBatches;
-  //  })
 
    const addModule = () => {
-    const newMod = new ModuleInfo(modName,modCode,credits);
+    const newMod = new ModuleInfo(modName,modCode,credits,uniqueBatch);
     return new Promise((resolve, reject) => {
     setModuleArray(prevModule => {
       const updatedModule = [...prevModule, newMod];
@@ -56,7 +44,7 @@ function Modules (props) {
     setModCode('')
     setCredits(0)
     setModName('')
-
+    setUniqueBatch(0)
     resolve();
   });
 
@@ -78,7 +66,7 @@ function Modules (props) {
   };
 
  console.log(modules)
-  return (
+  return(
    
     <form>
       <h1>{modules[currentModuleIndex]}</h1>
@@ -100,6 +88,25 @@ function Modules (props) {
         <input type="number" min="0" value={credits} onChange={event => setCredits(event.target.value)} />
       </label>
       <br />
+      <label>
+        Unique Batch
+        <div>
+          {batches.map((obj)=>(
+            <label key={obj.id}>
+              <input
+                type="radio"
+                name="batch"
+                value={obj.name}
+                checked={uniqueBatch === obj.id}
+                onChange={() => setUniqueBatch(obj.id)}
+      />
+      {obj.name}
+              
+            </label>
+          ))}
+        </div>
+      </label>
+      <br/>
       {currentModuleIndex !== modules.length - 1 ? handleUpdateShowNextButton(showNextButton) : handleUpdateShowNextButton(true) }
       {(currentModuleIndex === modules.length - 1) ?
         <button type="button" onClick={goNext}>Submit</button>
@@ -112,8 +119,8 @@ function Modules (props) {
 
 
 
-    </form>
-  );
+    </form>);
+  
 }
 
 export default Modules;
