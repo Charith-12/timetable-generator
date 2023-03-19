@@ -308,6 +308,11 @@ import React, { useState, useEffect } from 'react';
 
 const LecturerForm = () => {
   const [lecturers, setLecturers] = useState([]);
+
+  //lecmods is different from lecModules. lecmods contains the unique lecture for a module. 
+  //The reason for this is the edge coloring algorithm is assumes a 1:M mapping of lecturers and modules
+  // while the graph theory based greedy alogrithm assumes a M:M mapping. 
+  const [lecmods, setlecmods] = useState([]);
   const [name, setName] = useState('');
   const [lecid, setlecid] = useState('');
   const [lecModules, setLecModules] = useState(['']);
@@ -371,6 +376,25 @@ const LecturerForm = () => {
     }
   }
 
+  class lecmodAlloc{
+    constructor(lec,mod){
+      this.lec  = lec;
+      this.mod = mod;
+    }
+
+  }
+
+  const addlecmodAlloc = (lec,mods) => {
+    mods.map((mod)=>{
+      const newlecmod = new lecmodAlloc(lec,mod)
+       setlecmods((prevlecmods) => {
+        const updatedlecmods = [...prevlecmods,newlecmod];
+        localStorage.setItem('lecmodalloc',JSON.stringify(updatedlecmods));
+        return updatedlecmods;
+       })
+    }) 
+  }
+
   const addLecturer = () => {
     const newLecturer = new Lecturer(name, lecid, lecModules, maxHours, payRate);
     setLecturers((prevLecturers) => {
@@ -381,6 +405,8 @@ const LecturerForm = () => {
     console.log('add lecturer clicked');
     console.log(newLecturer);
     console.log(lecturers);
+  
+    addlecmodAlloc(lecid,selectedIDs);
     setName('');
     setLecModules([' ']);
     setlecid('');
@@ -406,8 +432,18 @@ const LecturerForm = () => {
         </label>
         <br />
         <p>Teachable Modules [Module Codes]</p>
+
+
+        {modulesArray.map((mod) =>(
+          
+          <input
+          type = "checkbox"
+          
+          >
+          </input>
+        ))}
   
-        {lecModules.map((lecModule, index) => (
+        {/* {lecModules.map((lecModule, index) => (
           <label key={index}>
             Module {index + 1}
             <input
@@ -420,7 +456,7 @@ const LecturerForm = () => {
               }
             />
           </label>
-        ))}
+        ))} */}
         <br />
         <button type="button" onClick={addModule}>
           Add Module

@@ -10,11 +10,14 @@ function Submit () {
     const [batches,setbatches] = useState('');
     const [lecturers,setlecturers] = useState('');
     const [modules,setmodules] = useState('');
+    const [lecmods,setlecmods] = useState([]);
+    const[classrooms,setClassrooms] = useState([]);
+    const time = new Date(); 
+    // const [startTime,setStartTime] = useState(0);
+    // const [closeTime,setCloseTime] = useState(0);
+    // const [costDayExtend,setCostToExtendDays]
+
     
-
-
-
-
 const getlocal_batches = () => {
  
     
@@ -33,6 +36,18 @@ const  getlocal_lecturers =() => {
 const getlocal_modules =() => {
     if(localStorage.getItem('ModuleInfoArray')){
         setmodules(JSON.parse(localStorage.getItem('ModuleInfoArray')))
+    }
+}
+
+const getlocal_lecmods = () =>{
+    if(localStorage.getItem('lecmodalloc')){
+        setlecmods(JSON.parse(localStorage.getItem('lecmodalloc')))
+    }
+}
+
+const getlocal_classroom = () =>{
+    if(localStorage.getItem('classroom')){
+        setClassrooms(JSON.parse(localStorage.getItem('classroom')))
     }
 }
 
@@ -66,12 +81,7 @@ const getlocal_modules =() => {
              noStudents = batch.numStudents;
              submiteachBatch();
         }
-
-
-  
-     
-
-
+ 
 }
 
 const sendto_lecturers = async () => {
@@ -118,6 +128,7 @@ const  sendto_module = async () => {
     let modname = '';
     let modecode = 0;
     let credits = 0;
+    let uniqueBatch = 0;
 
     const submiteachModule = () => {
         try {
@@ -125,6 +136,7 @@ const  sendto_module = async () => {
           modename: modname,
           modecode: modecode,
           credits: credits,
+          batch: uniqueBatch
         }).then(() =>{
           alert("succesful insert to lectr");
         });}
@@ -139,8 +151,36 @@ const  sendto_module = async () => {
              modname = module.name;
              modecode =  module.code;
              credits =  module.credits;
+             uniqueBatch = module.uniqueBatch;
              submiteachModule();
         }
+
+
+}
+
+
+const sendto_lmallocations = async () => {
+    getlocal_lecmods();
+
+    let lec = 0;
+    let mod = 0;
+
+    const submiteach_lmalloc = () => {
+        try {
+            axios.post('http://localhost:3001/api/insert/lmalloc',{
+                lec_id: lec,
+                mod_id: mod
+            })
+        } catch (error) {
+            console.error(error)
+        }
+    }
+
+    lecmods.map((obj)=>{
+        lec = obj.lec;
+        mod = obj.mod;
+        submiteach_lmalloc();
+    })
 
 
 }
@@ -211,11 +251,43 @@ const sendto_batch_modules = async () => {
 
 }
 
+
+const sendto_classrooms = async () =>{
+
+    getlocal_classroom();
+    
+    let room_id = '';
+    let capacity = 0;
+
+  
+    
+
+    const submiteach_classroom = () => {
+        try {
+            axios.post("http://localhost:3001/api/insert/classrooms",{
+                room_id: room_id,
+                capacity: capacity,
+            })
+        } catch (error) {
+            
+        }
+    }
+
+
+    classrooms.forEach(room => {
+        room_id = room.roomID;
+        capacity = room.capacity;
+        submiteach_classroom();
+    });
+}
+
 const sendto_constraints =  async () => {
 let costDay = 0;
 let costHours = 0;
 let costHire = 0;
 let intervalBetweenSlots = 0;
+let closeTime = 0;
+let openTime = 0;
 
 if(localStorage.getItem('costToExtendDays')){
     costDay = localStorage.getItem('costToExtendDays');
@@ -233,20 +305,34 @@ if(localStorage.getItem('intervalBetweenSlots')){
     intervalBetweenSlots = localStorage.getItem('intervalBetweenSlots');
 }
 
-const submiteachBatch = () => {
+if(localStorage.getItem('closeTime')){
+    const timeValue = localStorage.getItem('closeTime');
+    time.setHours(timeValue.slice(0,2));
+    closeTime = time.getHours();
+    
+}
+if(localStorage.getItem('openTime')){
+    const timeValue = localStorage.getItem('openTime');
+    time.setHours(timeValue.slice(0,2));
+    openTime = time.getHours();
+}
+
+
     try {
     axios.post('http://localhost:3001/api/insert/constraints',{
       costToExtendDays: costDay,
       costToExtendHours: costHours,
       costToHire: costHire,
       intervalBetweenSlots: intervalBetweenSlots,
+      openTime: openTime,
+      closeTime: closeTime,
     }).then(() =>{
       alert("succesful insert");
     });}
     catch(error){
         console.log(error);
     }
-}
+
 
 
 }
@@ -279,7 +365,9 @@ async function SendtoDB() {
         await sendto_lecturers();
         await sendto_batch_modules();
         await sendto_lec_modules();
+        await sendto_lmallocations();
         await sendto_constraints();
+        await sendto_classrooms();
         alert("Data sent successfully");
     } catch (error) {
         console.error(error);

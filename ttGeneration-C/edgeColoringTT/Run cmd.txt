@@ -9,3 +9,8 @@ only group by mysql error fix:
 
 SET GLOBAL sql_mode=(SELECT REPLACE(@@sql_mode,'ONLY_FULL_GROUP_BY',''));
 */
+
+
+gcc -o edgecol setEdgeCols.c -I/usr/include/mysql/ -L/usr/local/lib/mysql -lmysqlclient
+
+sudo ./edgecol

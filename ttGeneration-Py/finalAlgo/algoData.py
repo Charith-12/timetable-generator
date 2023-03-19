@@ -9,8 +9,8 @@ import mysql.connector
 # Connect to database
 conn = mysql.connector.connect(
     host='localhost',
-    user='root',
-    password='adithya889',
+    user='username',
+    password='password',
     database= 'fypdatabase'
 )
 
