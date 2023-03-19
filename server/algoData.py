@@ -236,31 +236,51 @@ class Classroom:
 
 
 
-c1 = Classroom('c1',25)
-c2 = Classroom('c2',140)
-c3 = Classroom('c3',120)
-
-Classrooms = [c1,c2,c3] 
+# c1 = Classroom('c1',25)
+# c2 = Classroom('c2',140)
+# c3 = Classroom('c3',120)
 
 
+cursor = conn.cursor()
+cursor.execute('SELECT * FROM classrooms')
+classes = cursor.fetchall()
+cursor.close()
 
-          ######################################################Constraints######################################################
+Classrooms = []
 
-costofNewHire  = 1000
-costofExtendDay = 300
-costofExtendWeek = 700
+for c in classes:
+    classroom =  Classroom(row[0],row[2])
+    Classrooms.append(classroom)
 
 
+
+        ########################################################Constraints######################################################
+
+
+
+
+
+
+
+cursor = conn.cursor()
+cursor.execute('SELECT * FROM constraints')
+constraints = cursor.fetchone()
+cursor.close()
+
+
+costofExtendDay = constraints[0] 
+costofExtendWeek = constraints[1]
+costofNewHire = constraints[2]
+breakRatio = constraints[3]
+beginTime = constraints[4]
+closeTime = constraints[5]
+opTime = closeTime - beginTime
+
+
+  ############################################# Fixed constraints ###############################################
 
 creditToHourRatio = 1
 breakTime = 1
-breakRatio = 1
-
-
-beginTime = 9
-closeTime = 16
-opTime = closeTime - beginTime
-
 beginDay = 0
 closeDay = 5
 opDays = beginDay - closeDay

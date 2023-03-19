@@ -11,6 +11,7 @@ import TimeForm from "./TimeForm";
 import Submit from "./Submit";
 import CostForm from "./costsForm";
 import Timetable from "./Timetable";
+import ClassroomForm from './Classrooms'
 
 
 
@@ -49,15 +50,20 @@ function Inputer  (props)  {
       )}
     else if (props.input ===6) {
       return(
-        <CostForm></CostForm>
+        <ClassroomForm></ClassroomForm>
       )
     }
     else if (props.input ===7) {
       return(
+        <CostForm></CostForm>
+      )
+    }
+    else if (props.input ===8) {
+      return(
         <Submit></Submit>
       )
     }
-     else if (props.input ===8) {
+     else if (props.input ===9) {
       return(
         <Timetable></Timetable>
       )

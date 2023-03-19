@@ -236,17 +236,47 @@ app.post("/api/insert/lmalloc",(req,res) => {
 }
 )
 
+app.post("/api/insert/classrooms",(req,res) => {
+  
+  const room_id = req.body.room_id;
+  const capacity = req.body.capacity;
+  
+
+
+  const sqlInsert = "INSERT INTO classrooms (room_id,capacity) VALUES(?,?)";
+  fypdb.query(sqlInsert,[room_id,capacity],(err,result)=>{
+    if(err){
+      console.log(err);
+      return res.status(500).send(err)
+    }else{
+      console.log(result)
+      console.log("succesfully interted classroom in fyp database ");
+      university.query(sqlInsert,[room_id,capacity],(err,result) =>{
+        if(err){
+          console.error(err)
+          return res.status(500).send(err)
+        }else{
+          console.log("succesfully interted classroom in university database ");
+          return res.status(200).send(result)
+        }
+      })
+    }
+  })
+})
+
 app.post("/api/insert/constraints", (req,res) => {
 
   const costToExtendDays = req.body.costToExtendDays
   const costToExtendHours = req.body.costToExtendHours
   const costToHire = req.body.costToHire
   const intervalBetweenSlots = req.body.intervalBetweenSlots
+  const openTime = req.body.openTime
+  const closeTime = req.body.closeTime
   
   
   const sqlInsert = 
-    "INSERT INTO constraints (costToExtendDays,costToExtendHours,costToHire,intervalBetweenSlots) VALUES (?,?,?,?)";
-  fypdb.query(sqlInsert, [costToExtendDays,costToExtendHours,costToHire,intervalBetweenSlots], (err,result) => {
+    "INSERT INTO constraints (costToExtendDays,costToExtendHours,costToHire,intervalBetweenSlots,openTime,closeTime) VALUES (?,?,?,?,?,?)";
+  fypdb.query(sqlInsert, [costToExtendDays,costToExtendHours,costToHire,intervalBetweenSlots,openTime,closeTime], (err,result) => {
       if(err){
           console.log(err);
           return res.status(500).send(err);
@@ -379,7 +409,29 @@ app.get('/run-python', (req, res) => {
   });
 });
 
-app.listen(3001,() =>{
-    console.log("running on port 3001");
+
+
+app.get('/run-c', (req, res) => {
+  const { exec } = require('child_process');
+
+exec('gcc setEdgeCols.c -o cProgram && ./cProgram', (error, stdout, stderr) => {
+  if (error) {
+    console.error(`Compilation error: ${error.message}`);
+    return;
+  }
+  if (stderr) {
+    console.error(`Runtime error: ${stderr}`);
+    return;
+  }
+  console.log(`Program output: ${stdout}`);
 });
+
+});
+
+
+
+app.listen(3001,() =>{
+  console.log("running on port 3001");
+});
+
 

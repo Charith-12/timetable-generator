@@ -17,20 +17,16 @@ function Modules (props) {
   // const modules = ['Module 1', 'Module 2', 'Module 3'];
   const [currentModuleIndex, setCurrentModuleIndex] = useState(0);
   const [modName, setModName] = useState('');
-  const[modCode,setModCode] = useState('');
+  const[modCode,setModCode] = useState(modules[currentModuleIndex]);
   const[credits,setCredits] = useState(0);
   const[uniqueBatch,setUniqueBatch] = useState(0);
   // const [lecturer, setLecturer] = useState([]);
   const[ModuleArray,setModuleArray] = useState([]);
   let showNextButton = false;
-
+ 
 
 
   
-
-
- 
-
 
    const addModule = () => {
     const newMod = new ModuleInfo(modName,modCode,credits,uniqueBatch);
@@ -41,7 +37,7 @@ function Modules (props) {
       return updatedModule;
     } )
     localStorage.setItem('ModuleInfoArray', JSON.stringify(ModuleArray));
-    setModCode('')
+    setModCode(modules[currentModuleIndex+1])
     setCredits(0)
     setModName('')
     setUniqueBatch(0)

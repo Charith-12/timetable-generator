@@ -141,6 +141,19 @@ const runRemotePy= () => {
   });
 }
 
+const runRemoteC = () => {
+  fetch('https://localhost:3001/run-c')
+  .then(response => response.text())
+  .then(data => {
+    console.log(`Received data from  unverstiy(c) server: ${data}`);
+    fetchEdges();
+    })
+  .catch(error => {
+    console.error(`Error while making request form unviversity(c server): ${error}`);
+   
+  });
+}
+
 
 
   const runPyAlgo = () => {
@@ -153,11 +166,9 @@ const runRemotePy= () => {
   const runCAlgo =  async() =>{
     setAl("C");
     getStartTime();
-    getlocal_batches();
     getEndtime();
-    fetchEdges();
-    
-   
+    getlocal_batches();
+    runRemoteC();
   }
 
   if (al === "Py") {

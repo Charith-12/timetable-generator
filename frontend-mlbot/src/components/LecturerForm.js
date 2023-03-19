@@ -432,8 +432,18 @@ const LecturerForm = () => {
         </label>
         <br />
         <p>Teachable Modules [Module Codes]</p>
+
+
+        {modulesArray.map((mod) =>(
+          
+          <input
+          type = "checkbox"
+          
+          >
+          </input>
+        ))}
   
-        {lecModules.map((lecModule, index) => (
+        {/* {lecModules.map((lecModule, index) => (
           <label key={index}>
             Module {index + 1}
             <input
@@ -446,7 +456,7 @@ const LecturerForm = () => {
               }
             />
           </label>
-        ))}
+        ))} */}
         <br />
         <button type="button" onClick={addModule}>
           Add Module
