@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: Mar 08, 2023 at 03:14 AM
+-- Generation Time: Mar 27, 2023 at 06:57 PM
 -- Server version: 8.0.32-0ubuntu0.22.04.2
 -- PHP Version: 8.1.2-1ubuntu2.11
 
@@ -239,6 +239,16 @@ ALTER TABLE `lmallocations`
 --
 ALTER TABLE `modules`
   ADD PRIMARY KEY (`mod_id`);
+
+--
+-- AUTO_INCREMENT for dumped tables
+--
+
+--
+-- AUTO_INCREMENT for table `classrooms`
+--
+ALTER TABLE `classrooms`
+  MODIFY `room_no` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
