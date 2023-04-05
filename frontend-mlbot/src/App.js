@@ -84,7 +84,7 @@ function App() {
 
 
 
-       {(showInput === 8 ) ?  <></>: <button 
+       {(showInput === 9) ?  <></>: <button 
         className="button"
         onClick={ handleNext} 
         
