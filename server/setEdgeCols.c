@@ -206,12 +206,12 @@ int getLecturers() {
 	conn = connectDB();
 	int i = 0; // array index
 	
-	//char queryStr[100]; 
-	//sprintf(queryStr, "SELECT lec_id, no_subjects, wl FROM lecturers ORDER BY wl DESC");
+	char queryStr[250]; 
+	sprintf(queryStr, "SELECT a.lec_id, COUNT(a.mod_id), SUM(m.credits) FROM lmallocations a INNER JOIN modules m ON m.mod_id = a.mod_id GROUP BY a.lec_id ORDER BY SUM(m.credits) DESC");
 	//printf("\n%s\n", queryStr);
 	
 	/* send SQL query */
-	if (mysql_query(conn, "SELECT lec_id, no_subjects, wl FROM lecturers ORDER BY wl DESC")){
+	if (mysql_query(conn, queryStr)){
 	 	printf("Failed to execute query. Error: %s\n", mysql_error(conn));
 	  	mysql_close(conn);
 	  	return 0;
@@ -225,10 +225,9 @@ int getLecturers() {
 
 	while(row = mysql_fetch_row(res)){
 		
-		strcpy(lecturers[i].lecid, (row[0] ? row[0] : "NULL"));
-  		lecturers[i].nos = atoi(row[1]);
-  		lecturers[i].wl = atoi(row[2]);
-		//printf("%s ", row[i] ? row[i] : "NULL");		
+		strcpy(lecturers[i].lecid, (row[0] ? row[0] : "NULL")); //printf("%s ", row[0] ? row[0] : "NULL");	
+  		lecturers[i].nos = (row[1] ? atoi(row[1]) : 0); //printf("%d ", row[1] ? atoi(row[1]) : 0);
+  		lecturers[i].wl = (row[2] ? atoi(row[2]) : 0);	//printf("%d ", row[2] ? atoi(row[2]) : 0);
 		// atoi: int converting
 		i++;
  	}
@@ -254,7 +253,7 @@ struct subject* getSubjects(char lecid[], int nos){
 	int i = 0; // index of the array
 	
 	char queryStr[250]; 
-	sprintf(queryStr, "SELECT m.mod_id, m.credits, m.batch_id FROM modules m INNER JOIN lmallocations a ON m.mod_id = a.mod_id AND a.lec_id = '%s' ORDER BY credits", lecid);
+	sprintf(queryStr, "SELECT m.mod_id, m.credits, b.batch_id FROM modules m INNER JOIN bmallocations b ON m.mod_id = b.mod_id INNER JOIN lmallocations a ON m.mod_id = a.mod_id AND a.lec_id = '%s' ORDER BY credits", lecid);
 	//printf("\n%s\n", queryStr);
 	
 	/* send SQL query */
