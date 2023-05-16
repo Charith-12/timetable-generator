@@ -92,7 +92,7 @@ setNumHours(24 -startTime)
     const response = await fetch('http://localhost:3001/api/edges');
     const data = await response.json();
     setEdgeDatas(data);
-    
+    console.log(edgeData)
     setNumHours(endTime - startTime);
 
   }
@@ -142,7 +142,7 @@ const runRemotePy= () => {
 }
 
 const runRemoteC = () => {
-  fetch('https://localhost:3001/run-c')
+  fetch('http://localhost:3001/run-c')
   .then(response => response.text())
   .then(data => {
     console.log(`Received data from  unverstiy(c) server: ${data}`);
@@ -163,7 +163,7 @@ const runRemoteC = () => {
     runRemotePy();
   }
 
-  const runCAlgo =  async() =>{
+  const runCAlgo =  () =>{
     setAl("C");
     getStartTime();
     getEndtime();

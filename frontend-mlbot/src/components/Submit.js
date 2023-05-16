@@ -145,6 +145,19 @@ const  sendto_module = async () => {
         }
     }
 
+    const submiteach_bmalloc = () => {
+        try {
+            axios.post('http://localhost:3001/api/insert/bmalloc',{
+               mod_id: modecode,
+               batch_id: uniqueBatch 
+            }).then(() =>{
+                alert("succesful insert to bmalloc");
+            });
+        } catch (error) {
+            
+        }
+    }
+
  
         for (let i = 0; i < modules.length; i++){
             let module = modules[i];
@@ -153,6 +166,7 @@ const  sendto_module = async () => {
              credits =  module.credits;
              uniqueBatch = module.uniqueBatch;
              submiteachModule();
+             submiteach_bmalloc();
         }
 
 

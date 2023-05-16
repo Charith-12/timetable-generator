@@ -169,7 +169,7 @@ for row in lecmodRows:
     LecMods.append(obj)
 
 
-# cursor.close()
+cursor.close()
 
 
 ## Use lecmod and mods to assign values to lecturers list
@@ -241,6 +241,17 @@ class Classroom:
 # c3 = Classroom('c3',120)
 
 
+# cursor = conn.cursor()
+# cursor.execute('SELECT * FROM classrooms')
+# classes = cursor.fetchall()
+# cursor.close()
+
+# Classrooms = []
+
+# for c in classes:
+#     classroom =  Classroom()
+#     Classrooms.append(classroom)
+
 cursor = conn.cursor()
 cursor.execute('SELECT * FROM classrooms')
 classes = cursor.fetchall()
@@ -249,8 +260,10 @@ cursor.close()
 Classrooms = []
 
 for c in classes:
-    classroom =  Classroom(row[0],row[2])
+    classroom = Classroom(c[0], c[2])  # using room_id and capacity columns only
     Classrooms.append(classroom)
+
+
 
 
 
@@ -276,6 +289,10 @@ beginTime = constraints[4]
 closeTime = constraints[5]
 opTime = closeTime - beginTime
 
+
+print("beginTime: " + str(beginTime ))
+print("end time  " + str(closeTime))
+print("optime: " + str(opTime))
 
   ############################################# Fixed constraints ###############################################
 

@@ -1,10 +1,11 @@
 const express = require("express");
 const app = express();
+const mysql2 = require('mysql2');
 const mysql = require('mysql');
 const bodyParser = require('body-parser');
 const cors = require('cors')
 
-const fypdb =  mysql.createPool({
+const fypdb =  mysql2.createPool({
   host: "localhost",
   user: "username",
   password: "password",
@@ -14,7 +15,7 @@ const fypdb =  mysql.createPool({
 const university = mysql.createPool({
   host: "localhost",
   user: "root",
-  password: "adithya1",
+  password: "new_password",
   database: "university"
 })
 
@@ -25,23 +26,23 @@ app.use(express.json());
 app.use(bodyParser.urlencoded({ extended: true}));
 
 
-// university.getConnection((err, connection) => {
-//   if (err) {
-//     console.error("Error connecting to database: ", err);
-//   } else {
-//     console.log("Connected to database successfully!");
-//     // test the database connection by running a sample query
-//     connection.query("SELECT * FROM batches", (err, results, fields) => {
-//       if (err) {
-//         console.error("Error querying database: ", err);
-//       } else {
-//         console.log("Query result: ", results);
-//       }
-//       // release the connection back to the pool
-//       connection.release();
-//     });
-//   }
-// });
+university.getConnection((err, connection) => {
+  if (err) {
+    console.error("Error connecting to database: ", err);
+  } else {
+    console.log("Connected to database successfully!");
+    // test the database connection by running a sample query
+    connection.query("SELECT * FROM batches", (err, results, fields) => {
+      if (err) {
+        console.error("Error querying database: ", err);
+      } else {
+        console.log("Query result: ", results);
+      }
+      // release the connection back to the pool
+      connection.release();
+    });
+  }
+});
 
 
 
@@ -236,6 +237,28 @@ app.post("/api/insert/lmalloc",(req,res) => {
 }
 )
 
+app.post("/api/insert/bmalloc",(req,res) => {
+
+  const batch_id = req.body.batch_id;
+  const mod_id = req.body.mod_id;
+
+  const sqlInsert =
+  "INSERT INTO bmallocations (batch_id,mod_id) VALUES(?,?)";
+
+  university.query(sqlInsert,[batch_id,mod_id], (err,result) => {
+    if(err){
+      console.error(err);
+      return res.status(500).send(err)
+    }else{
+      console.log("sent to bmallocations table in university database");
+      return res.status(200).send(result);
+    }
+  })
+
+}
+)
+
+
 app.post("/api/insert/classrooms",(req,res) => {
   
   const room_id = req.body.room_id;
@@ -411,24 +434,61 @@ app.get('/run-python', (req, res) => {
 
 
 
+// app.get('/run-c', (req, res) => {
+//   const { exec } = require('child_process');
+
+// exec('gcc -o edgecol setEdgeCols.c -I/usr/include/mysql/ -L/usr/local/lib/mysql -lmysqlclient && ./edgecol'
+// , (error, stdout, stderr) => {
+//   if (error) {
+//     console.error(`Compilation error: ${error.message}`);
+//     return;
+//   }
+//   if (stderr) {
+//     console.error(`Runtime error: ${stderr}`);
+//     return;
+//   }
+//   console.log(`Program output: ${stdout}`);
+// });
+
+// });
+
+ 
+
+
 app.get('/run-c', (req, res) => {
-  const { exec } = require('child_process');
+const gcc = spawn('gcc', ['-o', 'edgecol', 'setEdgeCols.c', '-I/usr/include/mysql/', '-L/usr/local/lib/mysql', '-lmysqlclient']);
 
-exec('gcc setEdgeCols.c -o cProgram && ./cProgram', (error, stdout, stderr) => {
-  if (error) {
-    console.error(`Compilation error: ${error.message}`);
+gcc.stdout.on('data', (data) => {
+  console.log(`gcc stdout: ${data}`);
+});
+
+gcc.stderr.on('data', (data) => {
+  console.error(`gcc stderr: ${data}`);
+});
+
+gcc.on('close', (code) => {
+  if (code !== 0) {
+    console.error(`gcc process exited with code ${code}`);
     return;
   }
-  if (stderr) {
-    console.error(`Runtime error: ${stderr}`);
-    return;
-  }
-  console.log(`Program output: ${stdout}`);
+
+  const edgecol = spawn('./edgecol', []);
+
+  edgecol.stdout.on('data', (data) => {
+    console.log(`edgecol stdout: ${data}`);
+  });
+
+  edgecol.stderr.on('data', (data) => {
+    console.error(`edgecol stderr: ${data}`);
+  });
+
+  edgecol.on('close', (code) => {
+    console.log(`edgecol process exited with code ${code}`);
+    res.send('Program output: Success!');
+  });
 });
 
 });
-
-
 
 app.listen(3001,() =>{
   console.log("running on port 3001");
