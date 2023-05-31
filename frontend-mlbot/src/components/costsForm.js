@@ -83,6 +83,7 @@ const CostForm = ()=> {
         Interval between slots:
         <input
           type="number"
+          min="0"
           value={intervalBetweenSlots}
           onChange={(e) => setIntervalBetweenSlots(e.target.value)}
         />

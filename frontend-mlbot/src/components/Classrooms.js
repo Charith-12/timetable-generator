@@ -9,11 +9,13 @@ const ClassroomForm = () => {
 
     function addClassroom () {
         const  newClassroom = {"roomID":roomID,"capacity": capacity}
-        setClassrooms(prevClassroom =>{
-            const updatedClassrooms = [...prevClassroom,newClassroom]
-            localStorage.setItem("classroom",JSON.stringify(classrooms))
-            return updatedClassrooms
-        })
+        classrooms.push(newClassroom);
+        // setClassrooms(prevClassroom =>{
+        //     const updatedClassrooms = [...prevClassroom,newClassroom]
+        //     localStorage.setItem("classroom",JSON.stringify(classrooms))
+        //     return updatedClassrooms
+        // })
+        localStorage.setItem("classroom",JSON.stringify(classrooms))
         setCapacity(0);
         setRoomID("");
     }

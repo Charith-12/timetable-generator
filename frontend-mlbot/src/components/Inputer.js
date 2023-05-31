@@ -25,45 +25,45 @@ function Inputer  (props)  {
     props.goNext();
   }
 
-    if(props.input ===0){
-  return (
-    <DateAdder></DateAdder>
-  )}
-  else if(props.input === 1){
-   return(
-   <Holidays></Holidays>
-    )}
-  else if(props.input === 2){
+  //   if(props.input ===0){
+  // return (
+  //   <DateAdder></DateAdder>
+  // )}
+  // else if(props.input === 1){
+  //  return(
+  //  <Holidays></Holidays>
+  //   )}
+  if(props.input === 0){
     return (
 <Batches></Batches>)}
-  else if(props.input === 3){
+  else if(props.input === 1){
     return(
       <Modules  onUpdateShowNextButton={handleUpdateShowNextButton}  goNextfunc = {goNext} />
     )}
-  else if(props.input === 4 ){
+  else if(props.input === 2 ){
     return (
       <Lecturers></Lecturers>
     )}
-    else if(props.input === 5 ){
+    else if(props.input === 3 ){
       return(
         <TimeForm></TimeForm>
       )}
-    else if (props.input ===6) {
+    else if (props.input ===4) {
       return(
         <ClassroomForm></ClassroomForm>
       )
     }
-    else if (props.input ===7) {
+    else if (props.input ===5) {
       return(
         <CostForm></CostForm>
       )
     }
-    else if (props.input ===8) {
+    else if (props.input ===6) {
       return(
         <Submit></Submit>
       )
     }
-     else if (props.input ===9) {
+     else if (props.input ===7) {
       return(
         <Timetable></Timetable>
       )

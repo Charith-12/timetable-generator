@@ -67,9 +67,7 @@ const getlocal_classroom = () =>{
           batch_name: batchName,
           batchid: batchid,
           no_students: noStudents,
-        }).then(() =>{
-          alert("succesful insert");
-        });}
+        })}
         catch(error){
             console.log(error);
         }
@@ -100,8 +98,7 @@ const sendto_lecturers = async () => {
           lec_name: lecname,
           maxHours: maxHours,
           payRate : payRate,
-        }).then(() =>{
-        });}
+        })}
         catch(error){
             console.log(error);
         }
@@ -137,9 +134,7 @@ const  sendto_module = async () => {
           modecode: modecode,
           credits: credits,
           batch: uniqueBatch
-        }).then(() =>{
-          alert("succesful insert to lectr");
-        });}
+        })}
         catch(error){
             console.log(error);
         }
@@ -150,9 +145,7 @@ const  sendto_module = async () => {
             axios.post('http://localhost:3001/api/insert/bmalloc',{
                mod_id: modecode,
                batch_id: uniqueBatch 
-            }).then(() =>{
-                alert("succesful insert to bmalloc");
-            });
+            })
         } catch (error) {
             
         }
@@ -210,9 +203,7 @@ const sendto_lec_modules = async () => {
      axios.post('http://localhost:3001/api/insert/lec_modules',{
        lec_id: lec_id.trim(),
        module_code: module_code.trim(),
-     }).then(() =>{
-       alert("succesful insert to lec_modules");
-     });}
+     })}
      catch(error){
          console.log(error);
      }
@@ -243,9 +234,7 @@ const sendto_batch_modules = async () => {
       batchname: batch_name,
       module_code: module_code,
       batchid: batchid
-    }).then(() =>{
-      alert("succesful insert to batch_modules");
-    });}
+    })}
     catch(error){
         console.log(error);
     }
@@ -340,8 +329,6 @@ if(localStorage.getItem('openTime')){
       intervalBetweenSlots: intervalBetweenSlots,
       openTime: openTime,
       closeTime: closeTime,
-    }).then(() =>{
-      alert("succesful insert");
     });}
     catch(error){
         console.log(error);
@@ -371,23 +358,52 @@ if(localStorage.getItem('openTime')){
 // }
 
 
-async function SendtoDB() {
-    console.log("send butoon pressed!")
-    try {
-        await sendto_batches();
-        await sendto_module();
-        await sendto_lecturers();
-        await sendto_batch_modules();
-        await sendto_lec_modules();
-        await sendto_lmallocations();
-        await sendto_constraints();
-        await sendto_classrooms();
-        alert("Data sent successfully");
-    } catch (error) {
-        console.error(error);
-        alert("An error occurred while sending the data");
-    }
+
+const EmptyDBs = async () =>{
+   await axios.post("http://localhost:3001/api/deleteUniversityDB");
+   await axios.post("http://localhost:3001/api/deleteFYPDB");
 }
+
+// async function SendtoDB() {
+//     console.log("send butoon pressed!")
+//     try {
+//         await EmptyDBs();
+//         await sendto_batches();
+//         await sendto_module();
+//         await sendto_lecturers();
+//         await sendto_batch_modules();
+//         await sendto_lec_modules();
+//         await sendto_lmallocations();
+//         await sendto_constraints();
+//         await sendto_classrooms();
+//         alert("Data sent successfully");
+//     } catch (error) {
+//         console.error(error);
+//         alert("An error occurred while sending the data");
+//     }
+// }
+
+async function SendtoDB() {
+    console.log("send button pressed!");
+    try {
+      await EmptyDBs();
+      await Promise.all([
+        sendto_batches(),
+        sendto_module(),
+        sendto_lecturers(),
+        sendto_batch_modules(),
+        sendto_lec_modules(),
+        sendto_lmallocations(),
+        sendto_constraints(),
+        sendto_classrooms(),
+      ]);
+      alert("Data sent successfully");
+    } catch (error) {
+      console.error(error);
+      alert("An error occurred while sending the data");
+    }
+  }
+  
 
 
     return (
