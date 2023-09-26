@@ -8,6 +8,10 @@
 int totalCost = 0;
 int costIncr = 10; // cost of adding one extra timeslot
 int newRoomCost = 100; //cost of adding one extra classroom.
+int lecturerUnAssignedModulesCount = 0;
+int lecturerUnAssignedModuleCost = 15009; //cost of not having a lecturer to allocate for a module. (due to work load limit)
+int lecturerUnAssignedHoursCount = 0;
+int lecturerUnAssignedHourCost = 1007; //LEC0's payRate. cost of not having a lecturer to allocate for a module hours. (due to work load limit). 
 int totalLecturerCost = 0; // cost sum of: payRate x hrs.teached, based on lec-mod allocation.
 
 struct subject {
@@ -189,7 +193,11 @@ int main(void) {
   
   if (putEdgesLL(sortedEdgesLL_head, "edges")) printf("\n Created edges added to the database successfully!! \n");
   
-  totalCost = totalCost + totalLecturerCost;
+  totalCost = totalCost /*this includes costIncr, newRoomCost*/ 
+  			+ totalLecturerCost 
+			+ (lecturerUnAssignedHoursCount*lecturerUnAssignedHourCost)
+			+ (lecturerUnAssignedModulesCount*lecturerUnAssignedModuleCost)
+			;
   printf("\n Total cost = %d \n", totalCost);
   
   // Recursive Test:
@@ -236,7 +244,7 @@ int getUALecturers() {
 	int i = 0; // array index
 	
 	char queryStr[250]; 
-	sprintf(queryStr, "SELECT a.lec_id, l.pay_rate, l.max_hours FROM lecmodallocations a INNER JOIN lecturers l ON a.lec_id = l.lec_id GROUP BY a.lec_id");
+	sprintf(queryStr, "SELECT a.lec_id, l.pay_rate, l.max_hours FROM lecmodallocations a INNER JOIN lecturers l ON a.lec_id = l.lec_id GROUP BY a.lec_id ORDER BY l.pay_rate ASC, l.max_hours DESC");
 	//printf("\n%s\n", queryStr);
 	
 	/* send SQL query */
@@ -279,7 +287,7 @@ struct lecForMod* getLecturersForModule(char mod_id[]){
 	struct lecForMod* head = NULL; // lecForModLL_head;
 	
 	char queryStr[200]; 
-	sprintf(queryStr, "SELECT a.lec_id FROM lecmodallocations a INNER JOIN lecturers l ON (a.lec_id = l.lec_id) WHERE a.mod_id = '%s' ORDER BY l.pay_rate ASC", mod_id);	
+	sprintf(queryStr, "SELECT a.lec_id FROM lecmodallocations a INNER JOIN lecturers l ON (a.lec_id = l.lec_id) WHERE a.mod_id = '%s' ORDER BY l.pay_rate ASC, l.max_hours DESC", mod_id);	
 	//printf("\n%s\n", queryStr);
 	
 	/* send SQL query */
@@ -380,7 +388,7 @@ int allocateBestLecturerToModule(int num_of_lecturers){
 	struct lecModPair* assignedLLHead = NULL; // assignedLecModPairLL_head;
 	
 	char queryStr[250]; 
-	sprintf(queryStr, "SELECT a.mod_id, m.credits FROM lecmodallocations a INNER JOIN modules m ON m.mod_id = a.mod_id GROUP BY a.mod_id ORDER BY m.credits DESC");
+	sprintf(queryStr, "SELECT a.mod_id, m.credits FROM lecmodallocations a INNER JOIN modules m ON m.mod_id = a.mod_id GROUP BY a.mod_id ORDER BY COUNT(a.lec_id) ASC, m.credits DESC");
 	//printf("\n%s\n", queryStr);
 	
 	/* send SQL query */
@@ -431,6 +439,12 @@ int allocateBestLecturerToModule(int num_of_lecturers){
   			
   			loop=(*loop).link; 
     	}
+    	
+    	if(isLecturerAssigned==0){ // no lecturer is available to assign. assigning 'LEC0'
+    		assignedLLHead = addNewAssignedLecModPairToLL("LEC0", (row[0] ? row[0] : "NULL"), assignedLLHead);
+    		lecturerUnAssignedModulesCount++;
+    		lecturerUnAssignedHoursCount = lecturerUnAssignedHoursCount + moduleCredits;
+		}
 		
 		// Clear lecForModLL and set head to null.
 		clearLecForModLL(&head);

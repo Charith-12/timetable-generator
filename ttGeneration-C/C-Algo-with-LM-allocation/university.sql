@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: Sep 26, 2023 at 12:30 AM
+-- Generation Time: Sep 26, 2023 at 02:11 PM
 -- Server version: 8.0.33-0ubuntu0.22.04.2
 -- PHP Version: 8.1.2-1ubuntu2.11
 
@@ -149,8 +149,8 @@ CREATE TABLE `lecturers` (
   `lec_name` varchar(255) DEFAULT NULL,
   `no_subjects` int DEFAULT '0',
   `wl` int DEFAULT '0',
-  `max_hours` int DEFAULT NULL,
-  `pay_rate` int DEFAULT NULL
+  `max_hours` int DEFAULT '168',
+  `pay_rate` int DEFAULT '0'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
@@ -159,7 +159,8 @@ CREATE TABLE `lecturers` (
 
 INSERT INTO `lecturers` (`lec_id`, `lec_name`, `no_subjects`, `wl`, `max_hours`, `pay_rate`) VALUES
 ('L1', 'Sunil', 0, 0, 25, 1000),
-('L2', 'Kanthi', 0, 0, 40, 7500);
+('L2', 'Kanthi', 0, 0, 40, 7500),
+('L3', 'Prasanna', 0, 0, 168, 0);
 
 -- --------------------------------------------------------
 
