@@ -1,4 +1,4 @@
-gcc -o mysqlc $(mysql_config --cflags) $(mysql_config --libs) setEdgeCols_withPreLMalloc.c -lmysqlclient
+gcc -o mysqlc2 $(mysql_config --cflags) $(mysql_config --libs) setEdgeCols_withPreLMalloc-withCostChoosing.c -lmysqlclient
 
 
 only grop by mysql error fix

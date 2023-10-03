@@ -1,9 +1,13 @@
 added the part that runs before the priviously developed algorithm.
 	made to work with many-to-many lec-mod allocations:
 		best lecturer being selected for each module based on minimum payRate while keeping with-in the work load limit.
+	When no lecturer found, choosing the least cost option between hiring a new lecturer or extending the work hour limit of an existing lecturer.
 
 With this change,
 university DB requires changes. 
-	new lecmodallocations table
-	two new columns for lecturers table
+	new lecmodallocations table (many-to-many)
+	two new columns for lecturers table (max_hours, )
+	new costs table (cost_id, new_lec, wl_ext, time_ext, new_room)
+	
 Front end & server require changes.
+	to populate new additions to the DB.
