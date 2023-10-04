@@ -79,12 +79,32 @@ int main(void) {
   
 	ARRAY_SIZE = getTimeslotCount();
 	setStartEndTimes();
+	if( END_TIME==0 ){
+		END_TIME=24;
+	} 
 	
 	int diff = ((END_TIME-START_TIME)*NO_OF_DAYS) - ARRAY_SIZE;
 	if(diff<0) {
-		printf("\n ERROR! Need more operating hours to continue the algorithm.\n No. of operating hours is less than the No. of timeslots.\n Try increasing the operating hours by changing Start and End times.");
+		printf("\n Need more operating hours to continue the algorithm.\n No. of operating hours is less than the No. of timeslots.\n");
 		printf(" Required minimum open hours: %d\n A Minimum of %d more hours are required\n", ARRAY_SIZE, abs(diff));
-		return 0;
+		printf("\n\n (*) Increasing the operating hours by changing Start and End times. (*)\n");
+		
+		// setting new end and start times
+		while( ((END_TIME-START_TIME)*NO_OF_DAYS) < ARRAY_SIZE ){
+			if( (END_TIME<24) && (END_TIME>0) ){
+				END_TIME++;
+				printf("\n New end time: %d", END_TIME);
+			}
+			else if(START_TIME>=01){
+				START_TIME--;
+				printf("\n New start time: %d", START_TIME);
+			}
+			else if(NO_OF_DAYS<7){
+				NO_OF_DAYS++;
+				printf("\n New no of days: %d", NO_OF_DAYS);
+			}	
+		}
+		
 	}
 	
 //	struct Individual {
